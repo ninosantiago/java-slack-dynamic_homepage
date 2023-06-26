@@ -20,6 +20,9 @@ dependencies {
 	// slack related libs
 	// implementation("com.slack.api:bolt-jetty:1.29.2")
 	implementation("com.slack.api:bolt-socket-mode:1.27.3")
+	// import slack-api sdk
+	implementation("com.slack.api:slack-api-client:1.27.3")
+
 	// implementation("javax.websocket:javax.websocket-api:1.1")
 	implementation("org.glassfish.tyrus.bundles:tyrus-standalone-client:1.17")
 	implementation 'org.java-websocket:Java-WebSocket:1.5.3'
