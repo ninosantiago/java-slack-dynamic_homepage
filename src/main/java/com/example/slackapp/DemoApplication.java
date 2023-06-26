@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.slackapp;
 
 import java.io.IOException;
 
@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.slack.api.bolt.socket_mode.SocketModeApp;
-import com.slack.api.methods.response.chat.ChatPostMessageResponse;
 
 @SpringBootApplication
 public class DemoApplication {
