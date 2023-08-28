@@ -1,6 +1,7 @@
 package com.example.slackapp;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +22,17 @@ public class SlackMessageHandler {
 
     BoltEventHandler<MessageEvent> eventHandler() {
         return (req, ctx) -> {
-            try {
-                sendSlackMessage(req, ctx);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+
+            // run sendSlackMessage asynchronously
+            CompletableFuture.runAsync(() -> {
+                try {
+                    sendSlackMessage(req, ctx);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            });
+
 
             // return a successful response
             return ctx.ack();
@@ -34,7 +40,7 @@ public class SlackMessageHandler {
     }
 
     @Async
-    private CompletableFuture<Object> sendSlackMessage(EventsApiPayload<MessageEvent> req, EventContext ctx)
+    private CompletableFuture<Void> sendSlackMessage(EventsApiPayload<MessageEvent> req, EventContext ctx)
             throws Exception {
         // get the text of the message
         String text = req.getEvent().getText();
@@ -78,7 +84,6 @@ public class SlackMessageHandler {
                     .token(ctx.getBotToken())
                     .text(finalAnswer));
             logger.info("response:" + res.toString());
-            return CompletableFuture.completedFuture(res);
 
         } catch (Exception e) {
             e.printStackTrace();
