@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -57,6 +58,12 @@ public class AzureQna {
 
         String payload = jsonNode.toString();
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
+        try {
+            logger.info("headers: "+mapper.writerWithDefaultPrettyPrinter().writeValueAsString(headers));
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         String response = restTemplate.postForObject(url, request, String.class);
         System.out.println(response);
 

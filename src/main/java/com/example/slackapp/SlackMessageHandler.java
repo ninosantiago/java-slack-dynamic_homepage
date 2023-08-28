@@ -49,6 +49,24 @@ public class SlackMessageHandler {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(intent);
         String answer = jsonNode.at("/answers/0/answer").asText("no answer found");
+
+        if (answer.equals("")) {
+            logger.info("no answer found... processing dialog prompts");
+
+            JsonNode dialogPrompts = jsonNode.at("/answers/0/dialog/prompts");
+            String source = jsonNode.at("/answers/0/source").asText("no source found");
+
+            if (dialogPrompts.isArray()) {
+                answer = source.equals("no source found") ? "here" : "according to: " + source + "\n";
+                for (final JsonNode objNode : dialogPrompts) {
+                    String dialogText = objNode.at("/displayText").asText();
+                    logger.info("prompt: " + dialogText);
+                    answer += "- " + dialogText + "\n";
+
+                }
+            }
+        }
+
         logger.info("got answer: " + answer);
 
         String finalAnswer = answer.equals("") ? "no answer found" : answer;
